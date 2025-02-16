@@ -1,0 +1,6 @@
+[Unit]
+ Description=Incremental backup with rsync to specific backup plates.
+
+[Service]
+ Type=simple
+ ExecStart=/usr/local/bin/autobackup %i

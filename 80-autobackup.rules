@@ -1,0 +1,6 @@
+# The autobackup script expects a '-' separated string with three arguments: DRIVENAME-TYPE-DEVICEFILENAME (the latter automatically inserted by udev with the specifier '%k').
+SUBSYSTEM=="block", ATTR{partition}=="1", ATTRS{idVendor}=="1058", ATTRS{idProduct}=="25e2", ATTRS{serial}=="575832314437355259364443", ACTION=="add", RUN+="/bin/systemctl --no-block start autobackup@autobackup1-encrypted-%k.service"
+SUBSYSTEM=="block", ATTR{partition}=="1", ATTRS{idVendor}=="1058", ATTRS{idProduct}=="25e2", ATTRS{serial}=="57584D31454337465A504153", ACTION=="add", RUN+="/bin/systemctl --no-block start autobackup@autobackup2-normal-%k.service"
+
+#Black WD Elements Autobackup3
+SUBSYSTEM=="block", ATTR{partition}=="1", ATTRS{idVendor}=="1058", ATTRS{idProduct}=="2621", ATTRS{serial}=="57584A3245343043504C3641", ACTION=="add", RUN+="/bin/systemctl --no-block start autobackup@autobackup3-normal-%k.service"
