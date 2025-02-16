@@ -68,9 +68,9 @@ while IFS= read -r dir; do
 done <<< "$DIRS"
 
 #Reporting remaining disk space
-USED_SPACE=$(df --output=used -h /dev/$DEVICE | tail -n 1)
-TOTAL_SPACE=$(df --output=size -h /dev/$DEVICE | tail -n 1)
-FRACTION_SPACE=$(df --output=pcent -h /dev/$DEVICE | tail -n 1)
+USED_SPACE=$(df --output=used -h $MOUNTPOINT | tail -n 1)
+TOTAL_SPACE=$(df --output=size -h $MOUNTPOINT | tail -n 1)
+FRACTION_SPACE=$(df --output=pcent -h $MOUNTPOINT | tail -n 1)
 echo "Total disk space used on device: $USED_SPACE of $TOTAL_SPACE ($FRACTION_SPACE)" >> $LOG
 
 #Umnount the plate
@@ -91,5 +91,13 @@ echo "Done with backup." >> $LOG
 echo "You can turn off the device now using \"udisksctl power-off -b /dev/$DEVICE\"." >> $LOG
 echo "To remount the device, call the following commands:" >> $LOG
 echo "mkdir /mnt/backup_to_read" >> $LOG
-echo "sudo mount -o ro /dev/$DEVICE /mnt/backup_to_read" >> $LOG
+if [[ $TYPE = "encrypted" ]]; then
+    echo "sudo cryptsetup luksOpen --key-file $LUKSKEY /dev/$DEVICE $NAME" >> $LOG
+    echo "sudo mount -o ro /dev/mapper/$NAME /mnt/backup_to_read" >> $LOG
+    echo "To close:"
+    echo "sudo umount /mnt/backup_to_read"
+    echo "sudo cryptsetup luksClose /dev/mapper/$NAME"
+else
+    echo "sudo mount -o ro /dev/$DEVICE /mnt/backup_to_read" >> $LOG
+fi
 exit 0
